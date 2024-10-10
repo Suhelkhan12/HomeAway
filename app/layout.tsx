@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
+import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/providers/theme-providers";
 import { ClerkProvider } from "@clerk/nextjs";
 
@@ -33,6 +34,7 @@ export default function RootLayout({
           >
             <Navbar />
             <main className=" container px-10">{children}</main>
+            <Toaster position="top-right" closeButton />
           </ThemeProvider>
         </body>
       </html>
