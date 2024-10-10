@@ -22,9 +22,9 @@ const DarkMode = () => {
           <span className=" sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="start" sideOffset={10}>
         <DropdownMenuItem
-          className="cursor-pointer"
+          className="cursor-pointer "
           onClick={() => setTheme("light")}
         >
           Light
