@@ -34,7 +34,7 @@ export default function RootLayout({
           >
             <Navbar />
             <main className=" container px-10">{children}</main>
-            <Toaster position="top-right" closeButton />
+            <Toaster closeButton />
           </ThemeProvider>
         </body>
       </html>
