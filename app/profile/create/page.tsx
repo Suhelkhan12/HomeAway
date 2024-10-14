@@ -1,14 +1,9 @@
+import React from "react";
+
 import { SubmitButton } from "@/components/form/Buttons";
 import FormInput from "@/components/form/FormInput";
 import FormContainer from "@/components/form/Fromcontainer";
-import React from "react";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createProfileAction = async (prevState: any, formData: FormData) => {
-  "use server";
-  console.log(formData.get("firstName"));
-  return { message: "Profile created successfully." };
-};
+import { createProfileAction } from "@/actions/actions";
 
 const CreateProfile = () => {
   return (
