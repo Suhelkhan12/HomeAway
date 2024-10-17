@@ -1,11 +1,16 @@
 import React from "react";
 
+import { redirect } from "next/navigation";
 import { SubmitButton } from "@/components/form/Buttons";
 import FormInput from "@/components/form/FormInput";
 import FormContainer from "@/components/form/Fromcontainer";
 import { createProfileAction } from "@/actions/actions";
+import { currentUser } from "@clerk/nextjs/server";
 
-const CreateProfile = () => {
+const CreateProfile = async () => {
+  const user = await currentUser();
+  if (user?.privateMetadata?.hasProfile) redirect("/");
+
   return (
     <section>
       <h1 className=" text-2xl font-semibold mb-8 capitalize">new user</h1>

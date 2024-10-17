@@ -9,11 +9,12 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { SignInButton, SignUpButton, SignedOut, SignedIn } from "@clerk/nextjs";
-import { LuUser2, LuAlignLeft } from "react-icons/lu";
+import { LuAlignLeft } from "react-icons/lu";
 import { Button } from "../ui/button";
 import SignOutLink from "./SignOutLink";
 
 import { links } from "@/utils/links";
+import UserIcon from "./UserIcon";
 
 const LinksDropdown = () => {
   return (
@@ -21,7 +22,7 @@ const LinksDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant={"outline"} className="flex gap-4 max-w-[6rem]">
           <LuAlignLeft className=" size-6" />
-          <LuUser2 className=" size-6 bg-primary rounded-full text-white" />
+          <UserIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-40" sideOffset={10}>

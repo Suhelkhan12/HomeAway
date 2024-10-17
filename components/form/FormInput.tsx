@@ -7,7 +7,7 @@ type FromInputProps = {
   type: string;
   label?: string;
   defaultValue?: string;
-  placeholder: string;
+  placeholder?: string;
 };
 const FormInput = (props: FromInputProps) => {
   const { name, type, label, placeholder, defaultValue } = props;

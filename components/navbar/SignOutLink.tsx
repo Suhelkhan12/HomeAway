@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 const SignOutLink = () => {
   const handleLogOut = () => {
-    toast.warning("You have been logged out 💥.");
+    toast.warning("You're being logged out💥.");
   };
   return (
     <SignOutButton redirectUrl="/">
