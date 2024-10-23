@@ -1,6 +1,10 @@
 "use server";
 
-import { profileSchema, validateWithZodSchema } from "@/utils/schema";
+import {
+  imageSchema,
+  profileSchema,
+  validateWithZodSchema,
+} from "@/utils/schema";
 import prisma from "@/lib/db";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
@@ -9,7 +13,9 @@ import { redirect } from "next/navigation";
 // helper functions
 const getAuthUser = async () => {
   const user = await currentUser();
-  if (!user) throw new Error("You must be logged in to access this feature.");
+  if (!user) {
+    return null;
+  }
 
   if (!user.privateMetadata.hasProfile) redirect("/profile/create");
 
@@ -18,7 +24,6 @@ const getAuthUser = async () => {
 
 // for rendering error
 const renderError = (error: unknown): { message: string } => {
-  console.log(error);
   return {
     message:
       error instanceof Error
@@ -71,6 +76,7 @@ export const createProfileAction = async (
 // for fetching image related to user
 export const fetchProfileImage = async () => {
   const user = await getAuthUser();
+  if (!user) return null;
 
   // fetching user from your db using clerk id and selecting image of the user only using select
   const profile = await prisma.profile.findUnique({
@@ -88,6 +94,8 @@ export const fetchProfileImage = async () => {
 // for fetching user profile
 export const fetchProfile = async () => {
   const user = await getAuthUser();
+  if (!user) return null;
+
   const profile = await prisma.profile.findUnique({
     where: {
       clerkId: user.id,
@@ -137,5 +145,7 @@ export const updateProfileImageAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
-  return { message: "Profile image created successfully" };
+  const image = formData.get("image") as File;
+  const validatedFields = validateWithZodSchema(imageSchema, { image });
+  return { message: "Profile image updated successfully 🎊" };
 };
