@@ -1,11 +1,10 @@
 "use server";
 
-import { profileSchema } from "@/utils/schema";
+import { profileSchema, validateWithZodSchema } from "@/utils/schema";
 import prisma from "@/lib/db";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import console, { error } from "console";
 
 // helper functions
 const getAuthUser = async () => {
@@ -41,7 +40,7 @@ export const createProfileAction = async (
     }
 
     const rowData = Object.fromEntries(formData);
-    const validatedFields = profileSchema.parse(rowData);
+    const validatedFields = validateWithZodSchema(profileSchema, rowData);
 
     // creating user profile
     await prisma.profile.create({
@@ -107,9 +106,8 @@ export const fetchProfile = async () => {
 };
 
 // for updating user profile
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateProfileAction = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
@@ -117,17 +115,13 @@ export const updateProfileAction = async (
 
   try {
     const rowData = Object.fromEntries(formData);
-    const validatedFields = profileSchema.safeParse(rowData);
 
-    if (!validatedFields.success) {
-      const errors = validatedFields.error.errors.map((err) => err.message);
-      throw new Error(errors.join(","));
-    }
+    const validatedData = validateWithZodSchema(profileSchema, rowData);
     await prisma.profile.update({
       where: {
         clerkId: user?.id,
       },
-      data: validatedFields.data,
+      data: validatedData,
     });
 
     // revalidating path
@@ -136,4 +130,12 @@ export const updateProfileAction = async (
   } catch (err) {
     return renderError(err);
   }
+};
+
+// for updating user profile image
+export const updateProfileImageAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string }> => {
+  return { message: "Profile image created successfully" };
 };
