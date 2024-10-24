@@ -9,6 +9,7 @@ import prisma from "@/lib/db";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { uploadImage } from "@/utils/supabase";
 
 // helper functions
 const getAuthUser = async () => {
@@ -145,7 +146,29 @@ export const updateProfileImageAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
-  const image = formData.get("image") as File;
-  const validatedFields = validateWithZodSchema(imageSchema, { image });
-  return { message: "Profile image updated successfully 🎊" };
+  try {
+    const user = await getAuthUser();
+
+    const image = formData.get("image") as File;
+    const { image: validatedImage } = validateWithZodSchema(imageSchema, {
+      image,
+    });
+
+    const imagePath = await uploadImage(validatedImage);
+
+    await prisma.profile.update({
+      where: {
+        clerkId: user?.id,
+      },
+      data: {
+        profileImage: imagePath,
+      },
+    });
+
+    revalidatePath("/profile");
+
+    return { message: "Profile image updated successfully 🎊" };
+  } catch (err) {
+    return renderError(err);
+  }
 };
