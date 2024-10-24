@@ -33,7 +33,7 @@ export default function RootLayout({
             enableSystem
           >
             <Navbar />
-            <main className=" container px-10">{children}</main>
+            <main className=" container px-5 sm:px-10 pt-10">{children}</main>
             <Toaster closeButton />
           </ThemeProvider>
         </body>

@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import {
   imageSchema,
   profileSchema,
+  propertySchema,
   validateWithZodSchema,
 } from "@/utils/schema";
 import prisma from "@/lib/db";
@@ -171,4 +173,20 @@ export const updateProfileImageAction = async (
   } catch (err) {
     return renderError(err);
   }
+};
+
+// for creating and storing property
+export const createPropertyAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string }> => {
+  try {
+    const user = await getAuthUser();
+    const rowData = Object.fromEntries(formData);
+    const validatedData = validateWithZodSchema(propertySchema, rowData);
+    return { message: "Property created successfullys" };
+  } catch (err) {
+    return renderError(err);
+  }
+  // redirect("/");
 };
